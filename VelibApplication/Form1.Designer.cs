@@ -1,6 +1,6 @@
 ﻿namespace VelibApplication
 {
-    partial class Form1
+    partial class VelibApplication
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -28,12 +28,97 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.QuitButton = new System.Windows.Forms.Button();
+            this.ValidateButton = new System.Windows.Forms.Button();
+            this.DepartureTextBox = new System.Windows.Forms.TextBox();
+            this.ArrivalTextBox = new System.Windows.Forms.TextBox();
+            this.DepartureLabel = new System.Windows.Forms.Label();
+            this.ArrivalLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // QuitButton
+            // 
+            this.QuitButton.Location = new System.Drawing.Point(12, 81);
+            this.QuitButton.Name = "QuitButton";
+            this.QuitButton.Size = new System.Drawing.Size(116, 23);
+            this.QuitButton.TabIndex = 0;
+            this.QuitButton.Text = "Quit";
+            this.QuitButton.UseVisualStyleBackColor = true;
+            this.QuitButton.Click += new System.EventHandler(this.QuitButton_Click);
+            // 
+            // ValidateButton
+            // 
+            this.ValidateButton.Location = new System.Drawing.Point(156, 81);
+            this.ValidateButton.Name = "ValidateButton";
+            this.ValidateButton.Size = new System.Drawing.Size(116, 23);
+            this.ValidateButton.TabIndex = 1;
+            this.ValidateButton.Text = "Validate";
+            this.ValidateButton.UseVisualStyleBackColor = true;
+            this.ValidateButton.Click += new System.EventHandler(this.ValidateButton_Click);
+            // 
+            // DepartureTextBox
+            // 
+            this.DepartureTextBox.Location = new System.Drawing.Point(89, 15);
+            this.DepartureTextBox.Name = "DepartureTextBox";
+            this.DepartureTextBox.Size = new System.Drawing.Size(171, 20);
+            this.DepartureTextBox.TabIndex = 2;
+            this.DepartureTextBox.TextChanged += new System.EventHandler(this.DepartureTextBox_TextChanged);
+            // 
+            // ArrivalTextBox
+            // 
+            this.ArrivalTextBox.Location = new System.Drawing.Point(89, 41);
+            this.ArrivalTextBox.Name = "ArrivalTextBox";
+            this.ArrivalTextBox.Size = new System.Drawing.Size(171, 20);
+            this.ArrivalTextBox.TabIndex = 3;
+            this.ArrivalTextBox.TextChanged += new System.EventHandler(this.ArrivalTextBox_TextChanged);
+            // 
+            // DepartureLabel
+            // 
+            this.DepartureLabel.AutoSize = true;
+            this.DepartureLabel.Location = new System.Drawing.Point(23, 18);
+            this.DepartureLabel.Name = "DepartureLabel";
+            this.DepartureLabel.Size = new System.Drawing.Size(54, 13);
+            this.DepartureLabel.TabIndex = 4;
+            this.DepartureLabel.Text = "Departure";
+            this.DepartureLabel.Click += new System.EventHandler(this.DepartureLabel_Click);
+            // 
+            // ArrivalLabel
+            // 
+            this.ArrivalLabel.AutoSize = true;
+            this.ArrivalLabel.Location = new System.Drawing.Point(32, 44);
+            this.ArrivalLabel.Name = "ArrivalLabel";
+            this.ArrivalLabel.Size = new System.Drawing.Size(36, 13);
+            this.ArrivalLabel.TabIndex = 5;
+            this.ArrivalLabel.Text = "Arrival";
+            this.ArrivalLabel.Click += new System.EventHandler(this.ArrivalLabel_Click);
+            // 
+            // VelibApplication
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(284, 116);
+            this.Controls.Add(this.ArrivalLabel);
+            this.Controls.Add(this.DepartureLabel);
+            this.Controls.Add(this.ArrivalTextBox);
+            this.Controls.Add(this.DepartureTextBox);
+            this.Controls.Add(this.ValidateButton);
+            this.Controls.Add(this.QuitButton);
+            this.Name = "VelibApplication";
+            this.Text = "VelibApplication";
+            this.Load += new System.EventHandler(this.VelibApplication_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button QuitButton;
+        private System.Windows.Forms.Button ValidateButton;
+        private System.Windows.Forms.TextBox DepartureTextBox;
+        private System.Windows.Forms.TextBox ArrivalTextBox;
+        private System.Windows.Forms.Label DepartureLabel;
+        private System.Windows.Forms.Label ArrivalLabel;
     }
 }
 
