@@ -12,12 +12,11 @@ namespace VelibService
     public interface IService1
     {
         [OperationContract]
-        string GetData(int value);
+        string GetJourney(string departure, string arrival);
 
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
+        // [OperationContract]
+        // CompositeType GetDataUsingDataContract(CompositeType composite);
 
-        // TODO: ajoutez vos opérations de service ici
     }
 
     // Utilisez un contrat de données comme indiqué dans l'exemple ci-après pour ajouter les types composites aux opérations de service.
