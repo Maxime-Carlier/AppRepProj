@@ -34,11 +34,12 @@
             this.ArrivalTextBox = new System.Windows.Forms.TextBox();
             this.DepartureLabel = new System.Windows.Forms.Label();
             this.ArrivalLabel = new System.Windows.Forms.Label();
+            this.GMapControl = new GMap.NET.WindowsForms.GMapControl();
             this.SuspendLayout();
             // 
             // QuitButton
             // 
-            this.QuitButton.Location = new System.Drawing.Point(12, 81);
+            this.QuitButton.Location = new System.Drawing.Point(12, 255);
             this.QuitButton.Name = "QuitButton";
             this.QuitButton.Size = new System.Drawing.Size(116, 23);
             this.QuitButton.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             // ValidateButton
             // 
-            this.ValidateButton.Location = new System.Drawing.Point(156, 81);
+            this.ValidateButton.Location = new System.Drawing.Point(156, 255);
             this.ValidateButton.Name = "ValidateButton";
             this.ValidateButton.Size = new System.Drawing.Size(116, 23);
             this.ValidateButton.TabIndex = 1;
@@ -58,7 +59,7 @@
             // 
             // DepartureTextBox
             // 
-            this.DepartureTextBox.Location = new System.Drawing.Point(89, 15);
+            this.DepartureTextBox.Location = new System.Drawing.Point(89, 189);
             this.DepartureTextBox.Name = "DepartureTextBox";
             this.DepartureTextBox.Size = new System.Drawing.Size(171, 20);
             this.DepartureTextBox.TabIndex = 2;
@@ -66,7 +67,7 @@
             // 
             // ArrivalTextBox
             // 
-            this.ArrivalTextBox.Location = new System.Drawing.Point(89, 41);
+            this.ArrivalTextBox.Location = new System.Drawing.Point(89, 215);
             this.ArrivalTextBox.Name = "ArrivalTextBox";
             this.ArrivalTextBox.Size = new System.Drawing.Size(171, 20);
             this.ArrivalTextBox.TabIndex = 3;
@@ -75,7 +76,7 @@
             // DepartureLabel
             // 
             this.DepartureLabel.AutoSize = true;
-            this.DepartureLabel.Location = new System.Drawing.Point(23, 18);
+            this.DepartureLabel.Location = new System.Drawing.Point(23, 192);
             this.DepartureLabel.Name = "DepartureLabel";
             this.DepartureLabel.Size = new System.Drawing.Size(54, 13);
             this.DepartureLabel.TabIndex = 4;
@@ -85,18 +86,45 @@
             // ArrivalLabel
             // 
             this.ArrivalLabel.AutoSize = true;
-            this.ArrivalLabel.Location = new System.Drawing.Point(32, 44);
+            this.ArrivalLabel.Location = new System.Drawing.Point(32, 218);
             this.ArrivalLabel.Name = "ArrivalLabel";
             this.ArrivalLabel.Size = new System.Drawing.Size(36, 13);
             this.ArrivalLabel.TabIndex = 5;
             this.ArrivalLabel.Text = "Arrival";
             this.ArrivalLabel.Click += new System.EventHandler(this.ArrivalLabel_Click);
             // 
+            // GMapControl
+            // 
+            this.GMapControl.Bearing = 0F;
+            this.GMapControl.CanDragMap = true;
+            this.GMapControl.EmptyTileColor = System.Drawing.Color.Navy;
+            this.GMapControl.GrayScaleMode = false;
+            this.GMapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.GMapControl.LevelsKeepInMemmory = 5;
+            this.GMapControl.Location = new System.Drawing.Point(297, 12);
+            this.GMapControl.MarkersEnabled = true;
+            this.GMapControl.MaxZoom = 18;
+            this.GMapControl.MinZoom = 0;
+            this.GMapControl.MouseWheelZoomEnabled = true;
+            this.GMapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.GMapControl.Name = "GMapControl";
+            this.GMapControl.NegativeMode = false;
+            this.GMapControl.PolygonsEnabled = true;
+            this.GMapControl.RetryLoadTile = 0;
+            this.GMapControl.RoutesEnabled = true;
+            this.GMapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.GMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.GMapControl.ShowTileGridLines = false;
+            this.GMapControl.Size = new System.Drawing.Size(633, 462);
+            this.GMapControl.TabIndex = 6;
+            this.GMapControl.Zoom = 12D;
+            // 
             // VelibApplication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 116);
+            this.ClientSize = new System.Drawing.Size(942, 486);
+            this.Controls.Add(this.GMapControl);
             this.Controls.Add(this.ArrivalLabel);
             this.Controls.Add(this.DepartureLabel);
             this.Controls.Add(this.ArrivalTextBox);
@@ -119,6 +147,7 @@
         private System.Windows.Forms.TextBox ArrivalTextBox;
         private System.Windows.Forms.Label DepartureLabel;
         private System.Windows.Forms.Label ArrivalLabel;
+        private GMap.NET.WindowsForms.GMapControl GMapControl;
     }
 }
 

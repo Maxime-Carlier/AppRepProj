@@ -133,9 +133,10 @@ namespace VelibApplication
 
         }
 
-        private void VelibApplication_Load(object sender, EventArgs e)
-        {
-
+        private void VelibApplication_Load(object sender, EventArgs e) {
+            GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+            GMapControl.SetPositionByKeywords("Paris, France");
         }
     }
 }
