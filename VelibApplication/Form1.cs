@@ -24,6 +24,15 @@ namespace VelibApplication
 {
     public partial class VelibApplication : Form {
 
+        // Needed to keep track of which TextBox was focused to fill in the address
+        private Control latestElementFocused;
+
+        private GMapOverlay markers;
+
+        private bool validateSuggestionSelection = false;
+        private bool validateDepartureEdit = true;
+        private bool validateArrivalEdit = true;
+
         public VelibApplication()
         {
             InitializeComponent();
@@ -122,17 +131,26 @@ namespace VelibApplication
         }
 
         private async void DepartureTextBox_TextChanged(object sender, EventArgs e) {
-            SuggestionListBox.SelectedValueChanged -= SuggestionListBox_SelectedValueChanged;    
-            List<string> result = await PlacesAPIs.getAutoCompleteAsync(DepartureTextBox.Text);
-            SuggestionListBox.DataSource = result;
-            SuggestionListBox.Visible = true;
-            SuggestionListBox.SelectedIndex = -1;
-            SuggestionListBox.SelectedValueChanged += SuggestionListBox_SelectedValueChanged;
+            if (validateDepartureEdit) {
+                validateSuggestionSelection = false; 
+                List<string> result = await PlacesAPIs.getAutoCompleteAsync(DepartureTextBox.Text);
+                SuggestionListBox.DataSource = result;
+                SuggestionListBox.Visible = true;
+                SuggestionListBox.SelectedIndex = -1;
+                validateSuggestionSelection = true;
+            }
         }
 
-        private void ArrivalTextBox_TextChanged(object sender, EventArgs e)
+        private async void ArrivalTextBox_TextChanged(object sender, EventArgs e)
         {
-
+            if (validateArrivalEdit) {
+                validateSuggestionSelection = false;
+                List<String> result = await PlacesAPIs.getAutoCompleteAsync(ArrivalTextBox.Text);
+                SuggestionListBox.DataSource = result;
+                SuggestionListBox.Visible = true;
+                SuggestionListBox.SelectedIndex = -1;
+                validateSuggestionSelection = true;
+            }
         }
 
         private void DepartureLabel_Click(object sender, EventArgs e)
@@ -154,28 +172,55 @@ namespace VelibApplication
             GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             GMapControl.SetPositionByKeywords("Paris, France");
+            markers = new GMapOverlay("markers");
+            GMapControl.Overlays.Add(markers);
         }
 
         private void SuggestionListBox_SelectedValueChanged(object sender, EventArgs e) {
-            if (SuggestionListBox.SelectedIndex >= 0 && SuggestionListBox.SelectedIndex < SuggestionListBox.Items.Count) {
-                DepartureTextBox.TextChanged -= new System.EventHandler(this.DepartureTextBox_TextChanged);
-                DepartureTextBox.Text = SuggestionListBox.SelectedItem.ToString();
-                SuggestionListBox.DataSource = null;
-                SuggestionListBox.Visible = false;
-                validateDeparture();
-                DepartureTextBox.TextChanged += new System.EventHandler(this.DepartureTextBox_TextChanged);
+            if (validateSuggestionSelection) {
+                if (SuggestionListBox.SelectedIndex >= 0 && SuggestionListBox.SelectedIndex < SuggestionListBox.Items.Count) {
+                    if (latestElementFocused == DepartureTextBox) {
+                        validateDepartureEdit = false;
+                        DepartureTextBox.Text = SuggestionListBox.SelectedItem.ToString();
+                        SuggestionListBox.DataSource = null;
+                        SuggestionListBox.Visible = false;
+                        validateDeparture();
+                        validateDepartureEdit = true;
+                    }
+                    else if (latestElementFocused == ArrivalTextBox) {
+                        validateArrivalEdit = false;
+                        ArrivalTextBox.Text = SuggestionListBox.SelectedItem.ToString();
+                        SuggestionListBox.DataSource = null;
+                        SuggestionListBox.Visible = false;
+                        validateArrival();
+                        validateArrivalEdit = true;
+                    }
+
+                }
             }
         }
 
         private async void validateDeparture() {
             if (GMapControl.SetPositionByKeywords(DepartureTextBox.Text) == GeoCoderStatusCode.G_GEO_SUCCESS) {
                 GMapControl.Zoom = 14;
-                GMapOverlay markers = new GMapOverlay("markers");
                 Coordinates departureMarkerCoordinate = await MapsAPIs.GetCoordinates(DepartureTextBox.Text);
-                GMapMarker departureMarker=new GMarkerGoogle(new PointLatLng(departureMarkerCoordinate.latitude,departureMarkerCoordinate.longitude),GMarkerGoogleType.red_pushpin);
+                GMapMarker departureMarker=new GMarkerGoogle(new PointLatLng(departureMarkerCoordinate.latitude,departureMarkerCoordinate.longitude),GMarkerGoogleType.red_dot);
                 markers.Markers.Add(departureMarker);
-                GMapControl.Overlays.Add(markers);
+                
             }
+        }
+
+        private async void validateArrival() {
+            if (GMapControl.SetPositionByKeywords(ArrivalTextBox.Text) == GeoCoderStatusCode.G_GEO_SUCCESS) {
+                GMapControl.Zoom = 14;
+                Coordinates arrivalMarkerCoordinates = await MapsAPIs.GetCoordinates(ArrivalTextBox.Text);
+                GMapMarker arrivalMarker=new GMarkerGoogle(new PointLatLng(arrivalMarkerCoordinates.latitude, arrivalMarkerCoordinates.longitude), GMarkerGoogleType.blue_dot);
+                markers.Markers.Add(arrivalMarker);
+            }
+        }
+
+        private void UpdateLatestFocused(object sender, EventArgs e) {
+            latestElementFocused = (Control) sender;
         }
     }
 }

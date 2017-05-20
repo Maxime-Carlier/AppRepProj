@@ -66,6 +66,7 @@
             this.DepartureTextBox.Size = new System.Drawing.Size(171, 20);
             this.DepartureTextBox.TabIndex = 2;
             this.DepartureTextBox.TextChanged += new System.EventHandler(this.DepartureTextBox_TextChanged);
+            this.DepartureTextBox.Enter += new System.EventHandler(this.UpdateLatestFocused);
             // 
             // ArrivalTextBox
             // 
@@ -74,6 +75,7 @@
             this.ArrivalTextBox.Size = new System.Drawing.Size(171, 20);
             this.ArrivalTextBox.TabIndex = 3;
             this.ArrivalTextBox.TextChanged += new System.EventHandler(this.ArrivalTextBox_TextChanged);
+            this.ArrivalTextBox.Enter += new System.EventHandler(this.UpdateLatestFocused);
             // 
             // DepartureLabel
             // 
