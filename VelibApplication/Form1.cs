@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -12,10 +14,12 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
+using VelibService.PlacesAPI;
+
 namespace VelibApplication
 {
-    public partial class VelibApplication : Form
-    {
+    public partial class VelibApplication : Form {
+
         public VelibApplication()
         {
             InitializeComponent();
@@ -115,7 +119,7 @@ namespace VelibApplication
 
         private void DepartureTextBox_TextChanged(object sender, EventArgs e)
         {
-
+            PlacesAPIs.getAutoComplete(DepartureTextBox.Text);
         }
 
         private void ArrivalTextBox_TextChanged(object sender, EventArgs e)
@@ -134,6 +138,10 @@ namespace VelibApplication
         }
 
         private void VelibApplication_Load(object sender, EventArgs e) {
+            initGMapControl();
+        }
+
+        private void initGMapControl() {
             GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             GMapControl.SetPositionByKeywords("Paris, France");
