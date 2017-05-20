@@ -12,11 +12,12 @@ namespace VelibService
     class MapsAPIs
     {
         // Ma clef perso (faut-il sortir ca en .conf pour plus tard ?)
-        private String key = "AIzaSyD0RXPsAcfkGFb6f5mVB9H61HvfAt6XLMI";
+        private string key = "AIzaSyD0RXPsAcfkGFb6f5mVB9H61HvfAt6XLMI";
+        private string urlapi = "https://maps.googleapis.com/maps/api/";
 
         public void GetDirections(string origin, string destination, string transportType)
         {
-            string url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
+            string url = urlapi + "directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
 
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
@@ -41,7 +42,7 @@ namespace VelibService
 
         public Coordinates GetCoordinates(string address)
         {
-            string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + key;
+            string url = urlapi + "geocode/json?address=" + address + "&key=" + key;
 
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();

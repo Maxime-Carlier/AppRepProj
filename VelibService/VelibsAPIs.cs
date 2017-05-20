@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using System.Xml;
+using System.Device.Location;
 
 namespace VelibService
 {
@@ -36,16 +37,16 @@ namespace VelibService
         // Méthode générique qui permet de recup les infos station selon élément recherché
         // (exemple elemWanted peut être : available, free, total, ticket, ...)
         // voir ici : http://www.velib.paris/service/stationdetails/12152
-        public int GetDetailsStation(Station station, String elemWanted)
+        public int GetDetailsStation(string station, string elemWanted)
         {
             XmlNodeList elemList = GetCarto();
             int result = 0;
 
             for (int i = 0; i < elemList.Count; i++)
             {
-                if (elemList[i].Attributes["name"].Value.Contains(station.name))
+                if (elemList[i].Attributes["name"].Value.Contains(station))
                 {
-                    String numPoint = elemList[i].Attributes["number"].Value;
+                    string numPoint = elemList[i].Attributes["number"].Value;
 
                     WebRequest request_for_data = WebRequest.Create("http://www.velib.paris/service/stationdetails/" + numPoint);
 
@@ -69,12 +70,37 @@ namespace VelibService
             return result;
         }
 
+        // Trouver la station la plus proche des coordonnées
+        // disposant au moins d'un vélo au depart
+        // et disposant au moins d'un emplacement vide à l'arrivée
         public Station GetNearStation(Coordinates coord)
         {
-            // trouver la station la plus proche des coordonnées
-            // disposant au moins d'un vélo au depart
-            // et disposant au moins d'un emplacement vide à l'arrivée
-            return null;
+            XmlNodeList elemList = GetCarto();
+
+            double maxDistance = Double.MaxValue;
+            Station theNearestStation = null;
+
+            for (int i = 0; i < elemList.Count; i++)
+            {
+                Double tempLat = Convert.ToDouble(elemList[i].Attributes["lat"].Value);
+                Double tempLng = Convert.ToDouble(elemList[i].Attributes["lng"].Value);
+
+                var stationCoord = new GeoCoordinate(tempLat, tempLng);
+                var currentCoord = new GeoCoordinate(coord.latitude, coord.longitude);
+
+                double distance = stationCoord.GetDistanceTo(currentCoord);
+
+                int availableBikes = GetDetailsStation(elemList[i].Attributes["name"].Value, "available");
+                // int freePlaces = GetDetailsStation(elemList[i].Attributes["name"].Value, "free");
+
+                if (distance < maxDistance && availableBikes > 0)
+                {
+                    theNearestStation = new Station(elemList[i]);
+                    maxDistance = distance;
+                }
+            }
+
+            return theNearestStation;
         }
     }
 }
