@@ -26,13 +26,13 @@ namespace VelibService.MapsAPI
             BasicConfigurator.Configure();
         }
 
-        public static void GetDirections(string origin, string destination, string transportType)
-        {
-            string url = urlapi + "directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
+        public static List<Coordinates> GetDirections(string origin, string destination, string transportType) {
+            string url = urlapi + "directions/json?origin=" + origin + "&destination=" + destination + "&mode=" +
+                         transportType + "&key=" + key;
 
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
-            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            Console.WriteLine(((HttpWebResponse) response).StatusDescription);
             StreamReader reader = new StreamReader(response.GetResponseStream());
 
             string result = reader.ReadToEnd();
@@ -41,14 +41,22 @@ namespace VelibService.MapsAPI
             response.Close();
 
             JObject json = JObject.Parse(result);
-            List<JToken> steps = json["routes"].First["legs"].First["steps"].Children().ToList();
-            
-            foreach (JToken step in steps)
-            {
-                // on a besoin de quoi ?? (voir ici https://developers.google.com/maps/documentation/directions/intro)
+            JArray steps = JArray.FromObject(json["routes"].First["legs"]);
+
+            List<Coordinates> resultCoordinates = new List<Coordinates>();
+            int i = 0;
+
+            foreach (JObject step in steps) {
+                Coordinates start = new Coordinates(step["start_location"]["lat"].Value<double>(),
+                    step["start_location"]["lng"].Value<double>());
+                Coordinates end = new Coordinates(step["end_location"]["lat"].Value<double>(),
+                    step["start_location"]["lng"].Value<double>());
+                Log.Debug(String.Format("Exctracted Coordinates #{0} {2} and #{1} {3}", i++, i++, start, end));
+                resultCoordinates.Add(start);
+                resultCoordinates.Add(end);
             }
 
-            // return ?;
+            return resultCoordinates;
         }
 
         public static async Task<Coordinates> GetCoordinates(string address)

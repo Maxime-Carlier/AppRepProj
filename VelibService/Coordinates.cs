@@ -16,5 +16,9 @@ namespace VelibService
             latitude = lat;
             longitude = lng;
         }
+
+        public override string ToString() {
+            return $"{nameof(latitude)}: {latitude}, {nameof(longitude)}: {longitude}";
+        }
     }
 }
