@@ -19,7 +19,8 @@ namespace VelibService.MapsAPI
         private static readonly ILog Log = LogManager.GetLogger(typeof(PlacesAPIs));
 
         // Ma clef perso (faut-il sortir ca en .conf pour plus tard ?)
-        private static String key = "AIzaSyD0RXPsAcfkGFb6f5mVB9H61HvfAt6XLMI";
+        private static string key = "AIzaSyD0RXPsAcfkGFb6f5mVB9H61HvfAt6XLMI";
+        private static string urlapi = "https://maps.googleapis.com/maps/api/";
 
         static MapsAPIs() {
             BasicConfigurator.Configure();
@@ -27,7 +28,7 @@ namespace VelibService.MapsAPI
 
         public static void GetDirections(string origin, string destination, string transportType)
         {
-            string url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
+            string url = urlapi + "directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
 
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
@@ -52,7 +53,7 @@ namespace VelibService.MapsAPI
 
         public static async Task<Coordinates> GetCoordinates(string address)
         {
-            string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + key;
+            string url = urlapi + "geocode/json?address=" + address + "&key=" + key;
 
             WebRequest request = WebRequest.CreateHttp(url);
             Log.Debug("Request sent : " + request);
