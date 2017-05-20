@@ -13,11 +13,29 @@ namespace VelibService
     public interface IService1
     {
         [OperationContract]
-        Task<string> GetJourney(string departure, string arrival);
+        Journey GetJourney(string departure, string arrival);
 
         // [OperationContract]
         // CompositeType GetDataUsingDataContract(CompositeType composite);
 
+    }
+
+    [DataContract]
+    public class Journey {
+        [DataMember]
+        public List<Coordinates> StartToStartStationCoordinates;
+
+        [DataMember]
+        public List<Coordinates> StartStationToEndStationCoordinates;
+
+        [DataMember]
+        public List<Coordinates> EndStationToEndCoordinates;
+
+        public Journey(List<Coordinates> startToStartStationCoordinates, List<Coordinates> startStationToEndStationCoordinates, List<Coordinates> endStationToEndCoordinates) {
+            StartToStartStationCoordinates = startToStartStationCoordinates;
+            StartStationToEndStationCoordinates = startStationToEndStationCoordinates;
+            EndStationToEndCoordinates = endStationToEndCoordinates;
+        }
     }
 
     // Utilisez un contrat de données comme indiqué dans l'exemple ci-après pour ajouter les types composites aux opérations de service.

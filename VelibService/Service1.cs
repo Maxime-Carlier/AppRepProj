@@ -12,11 +12,11 @@ namespace VelibService
     // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom de classe "Service1" à la fois dans le code et le fichier de configuration.
     public class Service1 : IService1
     {
-        public async Task<string> GetJourney(string departure, string arrival)
+        public Journey GetJourney(string departure, string arrival)
         {
 
-            Coordinates origin = await MapsAPIs.GetCoordinates(departure);
-            Coordinates destination = await MapsAPIs.GetCoordinates(arrival);
+            Task<Coordinates> origin = MapsAPIs.GetCoordinates(departure);
+            Task<Coordinates> destination = MapsAPIs.GetCoordinates(arrival);
 
             VelibsAPIs velibsServices = new VelibsAPIs();
 
@@ -31,7 +31,11 @@ namespace VelibService
 
             // TODO : constuire le result à envoyer au client
 
-            return string.Format("Result here");
+            List<Coordinates> startToStartStationCoordinates = new List<Coordinates>();
+            List<Coordinates> startStationToEndStationCoordinates = new List<Coordinates>();
+            List<Coordinates> endStationToEndCoordinates = new List<Coordinates>();
+
+            return new Journey(startToStartStationCoordinates, startStationToEndStationCoordinates, endStationToEndCoordinates);
         }
 
         /* ---
