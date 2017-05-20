@@ -19,7 +19,16 @@ namespace VelibService
 
             VelibsAPIs velibsServices = new VelibsAPIs();
 
-            // TODO : intéragir avec velibsServices pour recup les bonnes stations..
+            // TODO : intéragir avec velibsServices pour recup les bonnes stations.. :
+            // TODO : GetNearStation(origin)
+            // TODO : GetNearStation(destination)
+
+            // TODO : intéragir avec mapsServices pour recup le bon trajet.. :
+            // TODO : getDirection(Departure, stationDeparture, walking)
+            // TODO : getDirection(stationDeparture, stationArrival, bicycling)
+            // TODO : getDirection(stationArrival, arrival, walking
+
+            // TODO : constuire le result à envoyer au client
 
             return string.Format("Result here");
         }
