@@ -14,9 +14,9 @@ namespace VelibService
         // Ma clef perso (faut-il sortir ca en .conf pour plus tard ?)
         private String key = "AIzaSyD0RXPsAcfkGFb6f5mVB9H61HvfAt6XLMI";
 
-        public void GetDirections(string origin, string destination)
+        public void GetDirections(string origin, string destination, string transportType)
         {
-            string url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&key=" + key;
+            string url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&mode=" + transportType + "&key=" + key;
 
             WebRequest request = WebRequest.Create(url);
             WebResponse response = request.GetResponse();
