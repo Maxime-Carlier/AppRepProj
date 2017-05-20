@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace VelibService
 {
@@ -12,7 +13,7 @@ namespace VelibService
     public interface IService1
     {
         [OperationContract]
-        string GetJourney(string departure, string arrival);
+        Task<string> GetJourney(string departure, string arrival);
 
         // [OperationContract]
         // CompositeType GetDataUsingDataContract(CompositeType composite);

@@ -13,8 +13,12 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Xml;
-
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using VelibService;
 using VelibService.PlacesAPI;
+using VelibService.MapsAPI;
 
 namespace VelibApplication
 {
@@ -117,9 +121,13 @@ namespace VelibApplication
             }
         }
 
-        private void DepartureTextBox_TextChanged(object sender, EventArgs e)
-        {
-            PlacesAPIs.getAutoComplete(DepartureTextBox.Text);
+        private async void DepartureTextBox_TextChanged(object sender, EventArgs e) {
+            SuggestionListBox.SelectedValueChanged -= SuggestionListBox_SelectedValueChanged;    
+            List<string> result = await PlacesAPIs.getAutoCompleteAsync(DepartureTextBox.Text);
+            SuggestionListBox.DataSource = result;
+            SuggestionListBox.Visible = true;
+            SuggestionListBox.SelectedIndex = -1;
+            SuggestionListBox.SelectedValueChanged += SuggestionListBox_SelectedValueChanged;
         }
 
         private void ArrivalTextBox_TextChanged(object sender, EventArgs e)
@@ -139,12 +147,35 @@ namespace VelibApplication
 
         private void VelibApplication_Load(object sender, EventArgs e) {
             initGMapControl();
+            SuggestionListBox.SelectedIndex = -1;
         }
 
         private void initGMapControl() {
             GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             GMapControl.SetPositionByKeywords("Paris, France");
+        }
+
+        private void SuggestionListBox_SelectedValueChanged(object sender, EventArgs e) {
+            if (SuggestionListBox.SelectedIndex >= 0 && SuggestionListBox.SelectedIndex < SuggestionListBox.Items.Count) {
+                DepartureTextBox.TextChanged -= new System.EventHandler(this.DepartureTextBox_TextChanged);
+                DepartureTextBox.Text = SuggestionListBox.SelectedItem.ToString();
+                SuggestionListBox.DataSource = null;
+                SuggestionListBox.Visible = false;
+                validateDeparture();
+                DepartureTextBox.TextChanged += new System.EventHandler(this.DepartureTextBox_TextChanged);
+            }
+        }
+
+        private async void validateDeparture() {
+            if (GMapControl.SetPositionByKeywords(DepartureTextBox.Text) == GeoCoderStatusCode.G_GEO_SUCCESS) {
+                GMapControl.Zoom = 14;
+                GMapOverlay markers = new GMapOverlay("markers");
+                Coordinates departureMarkerCoordinate = await MapsAPIs.GetCoordinates(DepartureTextBox.Text);
+                GMapMarker departureMarker=new GMarkerGoogle(new PointLatLng(departureMarkerCoordinate.latitude,departureMarkerCoordinate.longitude),GMarkerGoogleType.red_pushpin);
+                markers.Markers.Add(departureMarker);
+                GMapControl.Overlays.Add(markers);
+            }
         }
     }
 }

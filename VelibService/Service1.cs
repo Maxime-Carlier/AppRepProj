@@ -4,18 +4,19 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Threading.Tasks;
+using VelibService.MapsAPI;
 
 namespace VelibService
 {
     // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom de classe "Service1" à la fois dans le code et le fichier de configuration.
     public class Service1 : IService1
     {
-        public string GetJourney(string departure, string arrival)
+        public async Task<string> GetJourney(string departure, string arrival)
         {
-            MapsAPIs mapsServices = new MapsAPIs();
 
-            Coordinates origin = mapsServices.GetCoordinates(departure);
-            Coordinates destination = mapsServices.GetCoordinates(arrival);
+            Coordinates origin = await MapsAPIs.GetCoordinates(departure);
+            Coordinates destination = await MapsAPIs.GetCoordinates(arrival);
 
             VelibsAPIs velibsServices = new VelibsAPIs();
 

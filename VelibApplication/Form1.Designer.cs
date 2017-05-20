@@ -35,11 +35,12 @@
             this.DepartureLabel = new System.Windows.Forms.Label();
             this.ArrivalLabel = new System.Windows.Forms.Label();
             this.GMapControl = new GMap.NET.WindowsForms.GMapControl();
+            this.SuggestionListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // QuitButton
             // 
-            this.QuitButton.Location = new System.Drawing.Point(12, 255);
+            this.QuitButton.Location = new System.Drawing.Point(12, 96);
             this.QuitButton.Name = "QuitButton";
             this.QuitButton.Size = new System.Drawing.Size(116, 23);
             this.QuitButton.TabIndex = 0;
@@ -49,7 +50,7 @@
             // 
             // ValidateButton
             // 
-            this.ValidateButton.Location = new System.Drawing.Point(156, 255);
+            this.ValidateButton.Location = new System.Drawing.Point(156, 96);
             this.ValidateButton.Name = "ValidateButton";
             this.ValidateButton.Size = new System.Drawing.Size(116, 23);
             this.ValidateButton.TabIndex = 1;
@@ -59,7 +60,8 @@
             // 
             // DepartureTextBox
             // 
-            this.DepartureTextBox.Location = new System.Drawing.Point(89, 189);
+            this.DepartureTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.DepartureTextBox.Location = new System.Drawing.Point(89, 30);
             this.DepartureTextBox.Name = "DepartureTextBox";
             this.DepartureTextBox.Size = new System.Drawing.Size(171, 20);
             this.DepartureTextBox.TabIndex = 2;
@@ -67,7 +69,7 @@
             // 
             // ArrivalTextBox
             // 
-            this.ArrivalTextBox.Location = new System.Drawing.Point(89, 215);
+            this.ArrivalTextBox.Location = new System.Drawing.Point(89, 56);
             this.ArrivalTextBox.Name = "ArrivalTextBox";
             this.ArrivalTextBox.Size = new System.Drawing.Size(171, 20);
             this.ArrivalTextBox.TabIndex = 3;
@@ -76,7 +78,7 @@
             // DepartureLabel
             // 
             this.DepartureLabel.AutoSize = true;
-            this.DepartureLabel.Location = new System.Drawing.Point(23, 192);
+            this.DepartureLabel.Location = new System.Drawing.Point(23, 33);
             this.DepartureLabel.Name = "DepartureLabel";
             this.DepartureLabel.Size = new System.Drawing.Size(54, 13);
             this.DepartureLabel.TabIndex = 4;
@@ -86,7 +88,7 @@
             // ArrivalLabel
             // 
             this.ArrivalLabel.AutoSize = true;
-            this.ArrivalLabel.Location = new System.Drawing.Point(32, 218);
+            this.ArrivalLabel.Location = new System.Drawing.Point(32, 59);
             this.ArrivalLabel.Name = "ArrivalLabel";
             this.ArrivalLabel.Size = new System.Drawing.Size(36, 13);
             this.ArrivalLabel.TabIndex = 5;
@@ -119,11 +121,22 @@
             this.GMapControl.TabIndex = 6;
             this.GMapControl.Zoom = 12D;
             // 
+            // SuggestionListBox
+            // 
+            this.SuggestionListBox.FormattingEnabled = true;
+            this.SuggestionListBox.Location = new System.Drawing.Point(15, 166);
+            this.SuggestionListBox.Name = "SuggestionListBox";
+            this.SuggestionListBox.Size = new System.Drawing.Size(244, 147);
+            this.SuggestionListBox.TabIndex = 7;
+            this.SuggestionListBox.Visible = false;
+            this.SuggestionListBox.SelectedValueChanged += new System.EventHandler(this.SuggestionListBox_SelectedValueChanged);
+            // 
             // VelibApplication
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(942, 486);
+            this.Controls.Add(this.SuggestionListBox);
             this.Controls.Add(this.GMapControl);
             this.Controls.Add(this.ArrivalLabel);
             this.Controls.Add(this.DepartureLabel);
@@ -148,6 +161,7 @@
         private System.Windows.Forms.Label DepartureLabel;
         private System.Windows.Forms.Label ArrivalLabel;
         private GMap.NET.WindowsForms.GMapControl GMapControl;
+        private System.Windows.Forms.ListBox SuggestionListBox;
     }
 }
 

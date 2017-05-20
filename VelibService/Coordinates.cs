@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VelibService
 {
-    class Coordinates
+    public class Coordinates
     {
         public double latitude;
         public double longitude;
