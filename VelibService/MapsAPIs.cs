@@ -8,9 +8,9 @@ using System.Net;
 using System.IO;
 using log4net;
 using log4net.Config;
-using VelibService.PlacesAPI;
+using VelibService;
 
-namespace VelibService.MapsAPI
+namespace VelibService
 {
     public static class MapsAPIs
     {
@@ -41,7 +41,7 @@ namespace VelibService.MapsAPI
             response.Close();
 
             JObject json = JObject.Parse(result);
-            JArray steps = JArray.FromObject(json["routes"].First["legs"]);
+            JArray steps = JArray.FromObject(json["routes"].First["legs"].First["steps"]);
 
             List<Coordinates> resultCoordinates = new List<Coordinates>();
             int i = 0;
@@ -51,7 +51,7 @@ namespace VelibService.MapsAPI
                     step["start_location"]["lng"].Value<double>());
                 Coordinates end = new Coordinates(step["end_location"]["lat"].Value<double>(),
                     step["start_location"]["lng"].Value<double>());
-                Log.Debug(String.Format("Exctracted Coordinates #{0} {2} and #{1} {3}", i++, i++, start, end));
+                Log.Debug(String.Format("Exctracted Coordinates #{0} [{2}] and #{1} [{3}]", i++, i++, start, end));
                 resultCoordinates.Add(start);
                 resultCoordinates.Add(end);
             }
@@ -59,7 +59,28 @@ namespace VelibService.MapsAPI
             return resultCoordinates;
         }
 
-        public static async Task<Coordinates> GetCoordinates(string address)
+        public static Coordinates GetCoordinates(string address)
+        {
+            string url = urlapi + "geocode/json?address=" + address + "&key=" + key;
+
+            WebRequest request = WebRequest.Create(url);
+            WebResponse response = request.GetResponse();
+            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+
+            string result = reader.ReadToEnd();
+
+            reader.Close();
+            response.Close();
+
+            JObject json = JObject.Parse(result);
+            double lat = (double)json["results"].First["geometry"]["location"]["lat"];
+            double lng = (double)json["results"].First["geometry"]["location"]["lng"];
+
+            return new Coordinates(lat, lng);
+        }
+
+        public static async Task<Coordinates> GetCoordinatesAsync(string address)
         {
             string url = urlapi + "geocode/json?address=" + address + "&key=" + key;
 

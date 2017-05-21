@@ -8,10 +8,11 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using System.Device.Location;
+using System.Globalization;
 
 namespace VelibService
 {
-    class VelibsAPIs
+    public static class VelibsAPIs
     {
         private static XmlNodeList GetCarto()
         {
@@ -37,7 +38,7 @@ namespace VelibService
         // Méthode générique qui permet de recup les infos station selon élément recherché
         // (exemple elemWanted peut être : available, free, total, ticket, ...)
         // voir ici : http://www.velib.paris/service/stationdetails/12152
-        public int GetDetailsStation(string station, string elemWanted)
+        public static int GetDetailsStation(string station, string elemWanted)
         {
             XmlNodeList elemList = GetCarto();
             int result = 0;
@@ -72,8 +73,7 @@ namespace VelibService
 
         // Trouver la station la plus proche des coordonnées
         // disposant au moins d'un vélo au depart
-        // et disposant au moins d'un emplacement vide à l'arrivée
-        public Station GetNearStation(Coordinates coord)
+        public static Station GetNearStationWithBikes(Coordinates coord)
         {
             XmlNodeList elemList = GetCarto();
 
@@ -82,18 +82,50 @@ namespace VelibService
 
             for (int i = 0; i < elemList.Count; i++)
             {
-                Double tempLat = Convert.ToDouble(elemList[i].Attributes["lat"].Value);
-                Double tempLng = Convert.ToDouble(elemList[i].Attributes["lng"].Value);
+                double tempLat = Convert.ToDouble(elemList[i].Attributes["lat"].Value, CultureInfo.InvariantCulture);
+                double tempLng = Convert.ToDouble(elemList[i].Attributes["lng"].Value, CultureInfo.InvariantCulture);
 
                 var stationCoord = new GeoCoordinate(tempLat, tempLng);
                 var currentCoord = new GeoCoordinate(coord.latitude, coord.longitude);
 
                 double distance = stationCoord.GetDistanceTo(currentCoord);
 
-                int availableBikes = GetDetailsStation(elemList[i].Attributes["name"].Value, "available");
-                // int freePlaces = GetDetailsStation(elemList[i].Attributes["name"].Value, "free");
+                //int availableBikes = GetDetailsStation(elemList[i].Attributes["name"].Value, "available");
+                int availableBikes = 1;
 
                 if (distance < maxDistance && availableBikes > 0)
+                {
+                    theNearestStation = new Station(elemList[i]);
+                    maxDistance = distance;
+                }
+            }
+
+            return theNearestStation;
+        }
+
+        // Trouver la station la plus proche des coordonnées
+        // disposant au moins d'un emplacement libre
+        public static Station GetNearStationWithFreePlaces(Coordinates coord)
+        {
+            XmlNodeList elemList = GetCarto();
+
+            double maxDistance = Double.MaxValue;
+            Station theNearestStation = null;
+
+            for (int i = 0; i < elemList.Count; i++)
+            {
+                double tempLat = Convert.ToDouble(elemList[i].Attributes["lat"].Value, CultureInfo.InvariantCulture);
+                double tempLng = Convert.ToDouble(elemList[i].Attributes["lng"].Value, CultureInfo.InvariantCulture);
+
+                var stationCoord = new GeoCoordinate(tempLat, tempLng);
+                var currentCoord = new GeoCoordinate(coord.latitude, coord.longitude);
+
+                double distance = stationCoord.GetDistanceTo(currentCoord);
+
+                //int freePlaces = GetDetailsStation(elemList[i].Attributes["name"].Value, "free");
+                int freePlaces = 1;
+
+                if (distance < maxDistance && freePlaces > 0)
                 {
                     theNearestStation = new Station(elemList[i]);
                     maxDistance = distance;

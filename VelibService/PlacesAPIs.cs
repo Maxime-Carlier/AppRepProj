@@ -12,7 +12,7 @@ using log4net;
 using log4net.Config;
 using Newtonsoft.Json.Linq;
 
-namespace VelibService.PlacesAPI {
+namespace VelibService {
     public static class PlacesAPIs {
 
         //Declare an instance for log4net
@@ -20,10 +20,6 @@ namespace VelibService.PlacesAPI {
 
         private static readonly string url = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
         private static readonly string key = "AIzaSyCumpMGwKBTp9BtHLL0q7hvBbEtdg-FMGA";
-
-        static PlacesAPIs() {
-            BasicConfigurator.Configure();
-        }
 
         public static async Task<List<string>> getAutoCompleteAsync(string input) {
             //string placesRequest = url + "?input=" + input +
