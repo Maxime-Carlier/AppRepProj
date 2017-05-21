@@ -14,50 +14,27 @@ namespace VelibService
     {
         [OperationContract]
         Journey GetJourney(string departure, string arrival);
-
-        // [OperationContract]
-        // CompositeType GetDataUsingDataContract(CompositeType composite);
-
     }
 
     [DataContract]
     public class Journey {
         [DataMember]
-        public List<Coordinates> StartToStartStationCoordinates;
+        public Coordinates OriginCoordinates;
 
         [DataMember]
-        public List<Coordinates> StartStationToEndStationCoordinates;
+        public Coordinates StartStationCoordinates;
 
         [DataMember]
-        public List<Coordinates> EndStationToEndCoordinates;
-
-        public Journey(List<Coordinates> startToStartStationCoordinates, List<Coordinates> startStationToEndStationCoordinates, List<Coordinates> endStationToEndCoordinates) {
-            StartToStartStationCoordinates = startToStartStationCoordinates;
-            StartStationToEndStationCoordinates = startStationToEndStationCoordinates;
-            EndStationToEndCoordinates = endStationToEndCoordinates;
-        }
-    }
-
-    // Utilisez un contrat de données comme indiqué dans l'exemple ci-après pour ajouter les types composites aux opérations de service.
-    // Vous pouvez ajouter des fichiers XSD au projet. Une fois le projet généré, vous pouvez utiliser directement les types de données qui y sont définis, avec l'espace de noms "VelibService.ContractType".
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
+        public Coordinates EndStationCoordinates;
 
         [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
+        public Coordinates DestinationCoordinates;
 
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
+        public Journey(Coordinates originCoordinates, Coordinates startStationCoordinates, Coordinates endStationCoordinates, Coordinates destinationCoordinates) {
+            OriginCoordinates = originCoordinates;
+            StartStationCoordinates = startStationCoordinates;
+            EndStationCoordinates = endStationCoordinates;
+            DestinationCoordinates = destinationCoordinates;
         }
     }
 }

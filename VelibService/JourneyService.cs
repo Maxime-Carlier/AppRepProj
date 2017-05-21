@@ -18,11 +18,10 @@ namespace VelibService
 
         public Journey GetJourney(string departure, string arrival)
         {
-
             Log.Debug("Started Journey calculations");
 
             Coordinates origin = MapsAPIs.GetCoordinates(departure);
-            Log.Debug("Got origin coordinates : "+origin);
+            Log.Debug("Got origin coordinates : " + origin);
 
             Coordinates destination = MapsAPIs.GetCoordinates(arrival);
             Log.Debug("Got destination coordinates : " + destination);
@@ -30,54 +29,13 @@ namespace VelibService
             VelibsAPIs velibsAPIs = new VelibsAPIs();
 
             Station startStation = velibsAPIs.GetNearStationWithBikes(origin);
-            Log.Debug("Got closest station to origin : "+startStation);
+            Log.Debug("Got closest station to origin : " + startStation);
 
             Station endStation = velibsAPIs.GetNearStationWithFreePlaces(destination);
             Log.Debug("Got closest station to destination : " + endStation);
 
-            List<Coordinates> departureToStartStationCoordinates = MapsAPIs.GetDirections(departure, startStation.address, "walking");
-            string departureToStartCoordinateString = "{";
-            foreach(Coordinates c in departureToStartStationCoordinates)
-            {
-                departureToStartCoordinateString += "["+c.ToString()+"]" + ", ";
-
-            }
-            departureToStartCoordinateString += "}";
-            Log.Debug("Got Route from origin to startStation : "+departureToStartCoordinateString);
-
-            List<Coordinates> StartStationToEndStationCoordinates = MapsAPIs.GetDirections(startStation.address, endStation.address, "bicycling");
-            string startStationToEndStationString = "{";
-            foreach (Coordinates c in StartStationToEndStationCoordinates)
-            {
-                startStationToEndStationString += "[" + c.ToString() + "]" + ", ";
-
-            }
-            startStationToEndStationString += "}";
-            Log.Debug("Got Route from origin to startStation : " + startStationToEndStationString);
-
-            List<Coordinates> EndStationToArrivalCoordinates = MapsAPIs.GetDirections(endStation.address, arrival, "walking");
-            string EndStationToArrivalString = "{";
-            foreach (Coordinates c in EndStationToArrivalCoordinates)
-            {
-                EndStationToArrivalString += "[" + c.ToString() + "]" + ", ";
-
-            }
-            EndStationToArrivalString += "}";
-            Log.Debug("Got Route from origin to startStation : " + EndStationToArrivalString);
-
-            // TODO : intéragir avec velibsServices pour recup les bonnes stations.. :
-            // TODO : GetNearStation(origin)
-            // TODO : GetNearStation(destination)
-
-            // TODO : intéragir avec mapsServices pour recup le bon trajet.. :
-            // TODO : getDirection(Departure, stationDeparture, walking)
-            // TODO : getDirection(stationDeparture, stationArrival, bicycling)
-            // TODO : getDirection(stationArrival, arrival, walking
-
-            // TODO : constuire le result à envoyer au client
-
             Log.Debug("Ended Journey Calculation");
-            return new Journey(departureToStartStationCoordinates, StartStationToEndStationCoordinates, EndStationToArrivalCoordinates);
+            return new Journey(origin, startStation.coordinates, endStation.coordinates, destination);
         }
 
         /* ---

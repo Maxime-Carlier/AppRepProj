@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using GMap.NET;
+using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using VelibService;
@@ -47,31 +49,34 @@ namespace VelibApplication
             JourneyService journeyServiceClient = new JourneyService();
             Journey result = journeyServiceClient.GetJourney(DepartureTextBox.Text, ArrivalTextBox.Text);
 
-            List<PointLatLng> startToStartStationPoints = new List<PointLatLng>();
-            foreach (Coordinates c in result.StartToStartStationCoordinates) {
-                startToStartStationPoints.Add(new PointLatLng(c.latitude,c.longitude));
-            }
-            GMapRoute startToStartStationRoute = new GMapRoute(startToStartStationPoints, "startToStartStation");
-            startToStartStationRoute.Stroke = new Pen(Color.Red, 3);
-            routes.Routes.Add(startToStartStationRoute);
+            PointLatLng origin = new PointLatLng(result.OriginCoordinates.latitude, result.OriginCoordinates.longitude);
+            PointLatLng startStation = new PointLatLng(result.StartStationCoordinates.latitude, result.StartStationCoordinates.longitude);
+            PointLatLng endStation = new PointLatLng(result.EndStationCoordinates.latitude, result.EndStationCoordinates.longitude);
+            PointLatLng destination = new PointLatLng(result.DestinationCoordinates.latitude, result.DestinationCoordinates.longitude);
 
-            List<PointLatLng> StartStationToEndStationPoints = new List<PointLatLng>();
-            foreach (Coordinates c in result.StartStationToEndStationCoordinates)
-            {
-                StartStationToEndStationPoints.Add(new PointLatLng(c.latitude, c.longitude));
-            }
-            GMapRoute startStationToEndStationRoute = new GMapRoute(StartStationToEndStationPoints, "StartStationToEndStationt");
-            startStationToEndStationRoute.Stroke = new Pen(Color.Blue, 3);
-            routes.Routes.Add(startStationToEndStationRoute);
+            GDirections startToStartStationDirections;
+            GDirections startStationToEndStationDirections;
+            GDirections endStationToDestinationDirections;
 
-            List<PointLatLng> EndStationToEndPoints = new List<PointLatLng>();
-            foreach (Coordinates c in result.EndStationToEndCoordinates)
-            {
-                EndStationToEndPoints.Add(new PointLatLng(c.latitude, c.longitude));
-            }
-            GMapRoute endStationToEndRoute = new GMapRoute(EndStationToEndPoints, "EndStationToEnd");
-            endStationToEndRoute.Stroke = new Pen(Color.Red, 3);
-            routes.Routes.Add(endStationToEndRoute);
+            GoogleMapProvider.Instance.GetDirections(out startToStartStationDirections, origin, startStation, false, false, true, false, false);
+            GoogleMapProvider.Instance.GetDirections(out startStationToEndStationDirections, startStation, endStation, false, false, false, false, false);
+            GoogleMapProvider.Instance.GetDirections(out endStationToDestinationDirections, endStation, destination, false, false, true, false, false);
+
+            GMapRoute startToStartStationGMapRoute = new GMapRoute(startToStartStationDirections.Route, "First");
+            GMapRoute startStationToEndStationGMapRoute = new GMapRoute(startStationToEndStationDirections.Route, "Second");
+            GMapRoute endStationToDestinationGMapRoute = new GMapRoute(endStationToDestinationDirections.Route, "Third");
+
+            startToStartStationGMapRoute.Stroke.DashStyle = DashStyle.Dash;
+            startToStartStationGMapRoute.Stroke.Color = Color.Blue;
+            routes.Routes.Add(startToStartStationGMapRoute);
+
+            startStationToEndStationGMapRoute.Stroke.DashStyle = DashStyle.Solid;
+            startStationToEndStationGMapRoute.Stroke.Color = Color.Red;
+            routes.Routes.Add(startStationToEndStationGMapRoute);
+
+            endStationToDestinationGMapRoute.Stroke.DashStyle = DashStyle.Dash;
+            endStationToDestinationGMapRoute.Stroke.Color = Color.Blue;
+            routes.Routes.Add(endStationToDestinationGMapRoute);
         }
 
         private async void DepartureTextBox_TextChanged(object sender, EventArgs e) {
