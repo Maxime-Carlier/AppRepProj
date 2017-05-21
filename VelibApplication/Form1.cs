@@ -62,20 +62,23 @@ namespace VelibApplication
             GoogleMapProvider.Instance.GetDirections(out startStationToEndStationDirections, startStation, endStation, false, false, false, false, false);
             GoogleMapProvider.Instance.GetDirections(out endStationToDestinationDirections, endStation, destination, false, false, true, false, false);
 
+
             GMapRoute startToStartStationGMapRoute = new GMapRoute(startToStartStationDirections.Route, "First");
             GMapRoute startStationToEndStationGMapRoute = new GMapRoute(startStationToEndStationDirections.Route, "Second");
             GMapRoute endStationToDestinationGMapRoute = new GMapRoute(endStationToDestinationDirections.Route, "Third");
 
-            startToStartStationGMapRoute.Stroke.DashStyle = DashStyle.Dash;
             startToStartStationGMapRoute.Stroke.Color = Color.Blue;
-            routes.Routes.Add(startToStartStationGMapRoute);
+            startToStartStationGMapRoute.Stroke.DashStyle = DashStyle.Dash;
 
+            startStationToEndStationGMapRoute.Stroke = (Pen) startToStartStationGMapRoute.Stroke.Clone();
+            startStationToEndStationGMapRoute.Stroke.Color=Color.Red;
             startStationToEndStationGMapRoute.Stroke.DashStyle = DashStyle.Solid;
-            startStationToEndStationGMapRoute.Stroke.Color = Color.Red;
-            routes.Routes.Add(startStationToEndStationGMapRoute);
 
             endStationToDestinationGMapRoute.Stroke.DashStyle = DashStyle.Dash;
             endStationToDestinationGMapRoute.Stroke.Color = Color.Blue;
+
+            routes.Routes.Add(startToStartStationGMapRoute);
+            routes.Routes.Add(startStationToEndStationGMapRoute);
             routes.Routes.Add(endStationToDestinationGMapRoute);
         }
 
