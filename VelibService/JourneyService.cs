@@ -27,10 +27,12 @@ namespace VelibService
             Coordinates destination = MapsAPIs.GetCoordinates(arrival);
             Log.Debug("Got destination coordinates : " + destination);
 
-            Station startStation = VelibsAPIs.GetNearStationWithBikes(origin);
+            VelibsAPIs velibsAPIs = new VelibsAPIs();
+
+            Station startStation = velibsAPIs.GetNearStationWithBikes(origin);
             Log.Debug("Got closest station to origin : "+startStation);
 
-            Station endStation = VelibsAPIs.GetNearStationWithFreePlaces(destination);
+            Station endStation = velibsAPIs.GetNearStationWithFreePlaces(destination);
             Log.Debug("Got closest station to destination : " + endStation);
 
             List<Coordinates> departureToStartStationCoordinates = MapsAPIs.GetDirections(departure, startStation.address, "walking");

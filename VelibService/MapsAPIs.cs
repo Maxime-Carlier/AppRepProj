@@ -14,7 +14,6 @@ namespace VelibService
 {
     public static class MapsAPIs
     {
-
         //Declare an instance for log4net
         private static readonly ILog Log = LogManager.GetLogger(typeof(PlacesAPIs));
 
