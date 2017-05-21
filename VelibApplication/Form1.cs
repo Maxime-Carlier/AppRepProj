@@ -59,7 +59,7 @@ namespace VelibApplication
             GDirections endStationToDestinationDirections;
 
             GoogleMapProvider.Instance.GetDirections(out startToStartStationDirections, origin, startStation, false, false, true, false, false);
-            GoogleMapProvider.Instance.GetDirections(out startStationToEndStationDirections, startStation, endStation, false, false, false, false, false);
+            GoogleMapProvider.Instance.GetDirections(out startStationToEndStationDirections, startStation, endStation, false, false, true, false, false);
             GoogleMapProvider.Instance.GetDirections(out endStationToDestinationDirections, endStation, destination, false, false, true, false, false);
 
 
